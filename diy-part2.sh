@@ -1,6 +1,15 @@
 #!/bin/bash
 # Description: OpenWrt DIY script part 2 (After Update feeds)
 
+# --- 0. 编译环境修复 (解决 gn 编译失败) ---
+# 修复 gn 源码下载问题，切换到 Github 源 (针对 gn [host] failed to build 错误)
+find feeds/packages -name "Makefile" | xargs grep -l "PKG_SOURCE_URL.*googlesource.com" | xargs sed -i 's/googlesource.com/github.com/g'
+
+# 强制 Python 软链接 (防止部分旧脚本找不到 python)
+ln -sf /usr/bin/python3 /usr/bin/python
+
+# ------------------------------------------------
+
 # 1. 基础修正
 # 修改默认 IP
 sed -i 's/192.168.1.1/10.10.10.10/g' package/base-files/files/bin/config_generate
